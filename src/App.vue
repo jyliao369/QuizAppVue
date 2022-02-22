@@ -1,21 +1,22 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <Quiz />
 </template>
 
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import HelloWorld from './components/HelloWorld.vue';
+<script>
+import Quiz from "./components/Quiz.vue";
 
-@Options({
+export default {
   components: {
-    HelloWorld,
+    Quiz,
   },
-})
-export default class App extends Vue {}
+};
 </script>
 
 <style>
+body {
+  margin: 0px;
+  padding: 0px;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
