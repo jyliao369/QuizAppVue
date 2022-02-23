@@ -154,7 +154,7 @@ h3 {
 .choices {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: flex-end;
 }
 .question,
 .choiceA,
@@ -188,5 +188,10 @@ h3 {
   border: none;
   font-size: 20px;
   padding: 10px;
+}
+
+.choices input {
+  width: 20px;
+  height: 20px;
 }
 </style>

@@ -30,10 +30,10 @@
         :key="index"
       >
         <p>{{ question.question }}</p>
-        <p>A: {{ question.ansA }}</p>
-        <p>B: {{ question.ansB }}</p>
-        <p>C: {{ question.ansC }}</p>
-        <p>D: {{ question.ansD }}</p>
+        <p @click="checkCorrect('A')">A: {{ question.ansA }}</p>
+        <p @click="checkCorrect('B')">B: {{ question.ansB }}</p>
+        <p @click="checkCorrect('C')">C: {{ question.ansC }}</p>
+        <p @click="checkCorrect('D')">D: {{ question.ansD }}</p>
       </div>
     </div>
   </div>
@@ -57,10 +57,12 @@ export default {
           ansB: "Chemical energy being stored as glycogen",
           ansC: "Chemical energy in the form of ATP",
           ansD: "Chemical energy released by glycolysis",
+          answer: "A",
         },
       ],
       a: 0,
       b: 1,
+      index: 0,
     };
   },
   methods: {
@@ -81,10 +83,22 @@ export default {
     nextQuestion() {
       this.a++;
       this.b++;
+      this.index++;
     },
     prevQuestion() {
       this.a--;
       this.b--;
+      this.index--;
+    },
+    checkCorrect(answer) {
+      console.log(this.index);
+      console.log(answer);
+      console.log(this.questions[this.index].answer);
+      if (answer === this.questions[0].answer) {
+        console.log("Correct");
+      } else {
+        console.log("Incorrect");
+      }
     },
   },
 };
