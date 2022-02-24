@@ -2,41 +2,89 @@
   <div v-if="showModal">
     <Modal @close="addQuestion" @showQuestion="showQuestion" />
   </div>
-  <h1>Quizly</h1>
+  <div class="title"><h1>Quizly</h1></div>
+
   <div class="addQues">
+    <!-- <button @click="addQuiz">Add New Quiz</button> -->
     <button @click="addQuestion">Add Question</button>
+    <button @click="testScore">test</button>
   </div>
 
-  <div class="outContainer">
+  <div class="overCont">
     <div class="container">
-      <div class="btn">
-        <button v-if="this.b === 1" :disabled="true" @click="prevQuestion">
-          Previous
-        </button>
-        <button v-else :disabled="false" @click="prevQuestion">Previous</button>
-        <h3>Question {{ b }}/{{ this.questions.length }}</h3>
-        <button
-          v-if="this.b <= this.questions.length - 1"
-          :disabled="false"
-          @click="nextQuestion"
-        >
-          Next
-        </button>
-        <button v-else :disabled="true" @click="prevQuestion">Next</button>
+      <!-- THIS IS THE SCOPRE SECTION -->
+      <div class="infoHead">
+        <div>
+          <h2>Question {{ b }}/{{ this.questions.length }}</h2>
+        </div>
+        <div>
+          <h2>Score: {{ score }}</h2>
+        </div>
       </div>
-      <div
-        class="quesContainer"
-        v-for="(question, index) in questions.slice(a, b)"
-        :key="index"
-      >
-        <p>{{ question.question }}</p>
-        <p @click="checkCorrect('A')">A: {{ question.ansA }}</p>
-        <p @click="checkCorrect('B')">B: {{ question.ansB }}</p>
-        <p @click="checkCorrect('C')">C: {{ question.ansC }}</p>
-        <p @click="checkCorrect('D')">D: {{ question.ansD }}</p>
+      <!-- THIS IS THE QUESTION AND ANSWER SECTION -->
+      <div class="quesContainer">
+        <div
+          class="question"
+          v-for="(question, index) in questions.slice(a, b)"
+          :key="index"
+        >
+          <div class="quesTitle">
+            <p>{{ question.question }}</p>
+          </div>
+          <div class="choiceCont">
+            <div class="choice">
+              <p @click="checkCorrect('A')">A: {{ question.ansA }}</p>
+            </div>
+            <div class="choice">
+              <p @click="checkCorrect('B')">B: {{ question.ansB }}</p>
+            </div>
+            <div class="choice">
+              <p @click="checkCorrect('C')">C: {{ question.ansC }}</p>
+            </div>
+            <div class="choice">
+              <p @click="checkCorrect('D')">D: {{ question.ansD }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- THIS IS THE BUTTON SECTION -->
+      <div class="btnContainer">
+        <div class="btnBackground">
+          <button v-if="this.b === 1" :disabled="true" @click="prevQuestion">
+            Previous
+          </button>
+          <button v-else :disabled="false" @click="prevQuestion">
+            Previous
+          </button>
+        </div>
+        <div class="btnBackground">
+          <button
+            v-if="this.b <= this.questions.length - 1"
+            :disabled="false"
+            @click="nextQuestion"
+          >
+            Next
+          </button>
+          <button v-else :disabled="true" @click="prevQuestion">Next</button>
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- <div class="outContainer">
+    <div class="container">
+      
+    </div>
+  </div> -->
+  <!-- <div
+    class="quizContainer"
+    v-for="(quiz, index) in testArray"
+    :key="index"
+    v-cloak
+  >
+    {{ testArray[index] }}
+    {{ testArray[index].length }}
+  </div> -->
 </template>
 
 <script>
@@ -49,6 +97,14 @@ export default {
   data() {
     return {
       showModal: false,
+      testArray: [
+        {
+          Chemistry: [],
+        },
+        {
+          Biology: [],
+        },
+      ],
       questions: [
         {
           question:
@@ -63,6 +119,7 @@ export default {
       a: 0,
       b: 1,
       index: 0,
+      score: 0,
     };
   },
   methods: {
@@ -100,36 +157,104 @@ export default {
         console.log("Incorrect");
       }
     },
+    addQuiz() {
+      let Math = [];
+      this.testArray.push({ Math });
+      console.log(this.testArray);
+    },
+    testHandle() {
+      this.testArray[0].test1.push({ question: "hello", reponse: "goodbye" });
+      this.testArray[0].test2.push({ question: "goodbye", reponse: "hello" });
+      console.log(this.testArray[0].test1[0]);
+      console.log(this.testArray[0].test2[0]);
+    },
+    testScore() {
+      this.score = this.score + 100;
+    },
   },
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.btn {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 25px;
+@import url("https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Source+Sans+3&display=swap");
+.title h1 {
+  color: white;
 }
-.btn h3 {
-  margin: 0px;
-}
-.outContainer {
+.overCont {
   display: flex;
   justify-content: center;
-}
-.container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  border-style: solid;
-  width: 750px;
-  padding: 25px;
   margin: 15px;
 }
+.container {
+  width: 450px;
+  font-family: "Source Sans 3";
+  padding: 20px;
+  background: #33628a;
+  border-radius: 10px;
+}
+.btnContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-radius: 10px;
+}
+.btnBackground button {
+  background: orange;
+  border: none;
+  color: white;
+  padding: 10px;
+  padding-left: 30px;
+  padding-right: 30px;
+  border-radius: 25px;
+  font-size: 20px;
+}
+.infoHead {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  text-align: left;
+  padding: 10px;
+  background: white;
+  margin-bottom: 10px;
+  border-radius: 10px;
+}
+.infoHead h2 {
+  margin: 0px;
+}
 .quesContainer {
+  background: white;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+.question {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  height: 425px;
+  justify-content: space-between;
+}
+.quesTitle {
+  text-align: left;
+  padding: 15px;
+}
+.quesTitle p {
+  font-size: 20px;
+  margin: 0px;
+}
+.choiceCont {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.choice {
+  border-radius: 15px;
+  width: 400px;
+  margin: 10px;
+  background: #d9e2e9;
+}
+.choice p {
+  margin: 7px;
+  font-size: 18px;
 }
 </style>
