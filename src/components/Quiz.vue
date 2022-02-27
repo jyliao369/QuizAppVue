@@ -1,16 +1,20 @@
 <template>
-  <div v-if="showModal">
-    <Modal
+  <div v-if="showQuestionModal">
+    <QuestionModal
       :categories="categories"
-      @close="addQuest"
-      @showQuestion="addQuestion"
+      @close="addQuestModal"
+      @addQuestion="addQuestion"
     />
+  </div>
+
+  <div v-if="showCategoryModal">
+    <CategoryModal @close="addCatModal" @addCategory="addCategory" />
   </div>
   <div class="title"><h1>Quizly</h1></div>
 
   <div class="addQues">
-    <button @click="addQuest">Add Question</button>
-    <button @click="addCategory">Add New Category</button>
+    <button @click="addCatModal">Add New Category</button>
+    <button @click="addQuestModal">Add Question</button>
   </div>
 
   <div class="overCont">
@@ -93,14 +97,22 @@
 </template>
 
 <script>
-import Modal from "./Modal.vue";
+import CategoryModal from "./CategoryModal.vue";
+import QuestionModal from "./QuestionModal.vue";
 
 export default {
   components: {
-    Modal,
+    CategoryModal,
+    QuestionModal,
   },
   data() {
     return {
+      showQuestionModal: false,
+      showCategoryModal: false,
+      a: 0,
+      b: 1,
+      index: 0,
+      score: 0,
       currentCategory: [
         {
           name: "Biology",
@@ -194,38 +206,14 @@ export default {
           ],
         },
       ],
-      newCategory: {
-        name: "History",
-        questions: [
-          {
-            question:
-              "Which of these countries did the Soviet Union NEVER invade?",
-            ansA: "Afghanistan",
-            ansB: "Finland",
-            ansC: "Poland",
-            ansD: "Sweden",
-            answer: "D",
-          },
-          {
-            question: "Who was the first person to orbit the Earth?",
-            ansA: "Neil Armstrong",
-            ansB: "The Boss",
-            ansC: "Yuri Gagarin",
-            ansD: "John Glenn",
-            answer: "C",
-          },
-        ],
-      },
-      showModal: false,
-      a: 0,
-      b: 1,
-      index: 0,
-      score: 0,
     };
   },
   methods: {
-    addQuest() {
-      this.showModal = !this.showModal;
+    addQuestModal() {
+      this.showQuestionModal = !this.showQuestionModal;
+    },
+    addCatModal() {
+      this.showCategoryModal = !this.showCategoryModal;
     },
     showQuestion(title, choiceA, choiceB, choiceC, choiceD, answer) {
       console.log(title, choiceA, choiceB, choiceC, choiceD, answer);
@@ -268,9 +256,6 @@ export default {
       this.a = 0;
       this.b = 1;
     },
-    addCategory() {
-      this.categories.push(this.newCategory);
-    },
     addQuestion(question, choiceA, choiceB, choiceC, choiceD, answer, index) {
       this.categories[index].questions.push({
         question: question,
@@ -281,6 +266,9 @@ export default {
         answer: answer,
       });
       // console.log(this.categories[index].questions);
+    },
+    addCategory(category) {
+      this.categories.push({ name: category, questions: [] });
     },
   },
 };

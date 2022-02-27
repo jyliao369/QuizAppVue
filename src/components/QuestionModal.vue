@@ -77,16 +77,7 @@
       </div>
       <div class="btns">
         <button @click.self="closeModal" class="canBtn">Cancel</button>
-        <button @click="addQuestion" class="creBtn">Create</button>
-      </div>
-      <div class="test">
-        <p>index: {{ index }}</p>
-        <p>Question: {{ question }}</p>
-        <p>A: {{ ansA }}</p>
-        <p>B: {{ ansB }}</p>
-        <p>C: {{ ansC }}</p>
-        <p>D: {{ ansD }}</p>
-        <p>Answer: {{ answer }}</p>
+        <button @click="addQuestion" class="creBtn">Add Question</button>
       </div>
     </div>
   </div>
@@ -112,7 +103,7 @@ export default {
     },
     addQuestion() {
       this.$emit(
-        "showQuestion",
+        "addQuestion",
         this.question,
         this.ansA,
         this.ansB,
@@ -136,7 +127,7 @@ export default {
   height: 100%;
 }
 .container {
-  width: 625px;
+  width: 550px;
   padding: 30px 40px 30px 40px;
   margin: 100px auto;
   background: white;
@@ -150,7 +141,7 @@ h3 {
 .questionForm {
   display: flex;
   flex-direction: column;
-  margin-bottom: 25px;
+  margin-bottom: 10px;
 }
 .questionForm h3 {
   margin-bottom: 5px;
