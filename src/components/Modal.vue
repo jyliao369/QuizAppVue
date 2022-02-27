@@ -5,25 +5,37 @@
         <div class="titleForm">
           <h2>Add a Question</h2>
         </div>
+        <div class="catForm">
+          <h3>Select Category</h3>
+          <select class="category" v-model="index">
+            <option
+              v-for="(category, index) in categories"
+              :key="index"
+              v-bind:value="index"
+            >
+              {{ category.name }}
+            </option>
+          </select>
+        </div>
         <div class="qForm">
           <h3>Question</h3>
-          <input class="question" v-model="title" />
+          <input class="question" v-model="question" />
         </div>
         <div class="aForm">
           <h3>Choice A</h3>
-          <input class="choiceA" v-model="choiceA" />
+          <input class="choiceA" v-model="ansA" />
         </div>
         <div class="bForm">
           <h3>Choice B</h3>
-          <input class="choiceB" v-model="choiceB" />
+          <input class="choiceB" v-model="ansB" />
         </div>
         <div class="cForm">
           <h3>Choice C</h3>
-          <input class="choiceC" v-model="choiceC" />
+          <input class="choiceC" v-model="ansC" />
         </div>
         <div class="dForm">
           <h3>Choice D</h3>
-          <input class="choiceD" v-model="choiceD" />
+          <input class="choiceD" v-model="ansD" />
         </div>
         <div class="ansForm">
           <h3>The Answer is:</h3>
@@ -67,20 +79,31 @@
         <button @click.self="closeModal" class="canBtn">Cancel</button>
         <button @click="addQuestion" class="creBtn">Create</button>
       </div>
+      <div class="test">
+        <p>index: {{ index }}</p>
+        <p>Question: {{ question }}</p>
+        <p>A: {{ ansA }}</p>
+        <p>B: {{ ansB }}</p>
+        <p>C: {{ ansC }}</p>
+        <p>D: {{ ansD }}</p>
+        <p>Answer: {{ answer }}</p>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
+  props: ["categories"],
   data() {
     return {
-      title: "",
-      choiceA: "",
-      choiceB: "",
-      choiceC: "",
-      choiceD: "",
+      question: "",
+      ansA: "",
+      ansB: "",
+      ansC: "",
+      ansD: "",
       answer: "",
+      index: "",
     };
   },
   methods: {
@@ -90,12 +113,13 @@ export default {
     addQuestion() {
       this.$emit(
         "showQuestion",
-        this.title,
-        this.choiceA,
-        this.choiceB,
-        this.choiceC,
-        this.choiceD,
-        this.answer
+        this.question,
+        this.ansA,
+        this.ansB,
+        this.ansC,
+        this.ansD,
+        this.answer,
+        this.index
       );
       this.$emit("close");
     },
@@ -136,6 +160,7 @@ h3 {
   align-items: flex-start;
   margin-bottom: 20px;
 }
+.catForm,
 .qForm,
 .aForm,
 .bForm,
@@ -156,6 +181,7 @@ h3 {
   flex-direction: row;
   align-items: flex-end;
 }
+.category,
 .question,
 .choiceA,
 .choiceB,
@@ -189,9 +215,14 @@ h3 {
   font-size: 20px;
   padding: 10px;
 }
-
 .choices input {
   width: 20px;
   height: 20px;
+}
+.test {
+  display: flex;
+}
+.test p {
+  margin-left: 5px;
 }
 </style>

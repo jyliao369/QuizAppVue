@@ -1,14 +1,16 @@
 <template>
   <div v-if="showModal">
-    <Modal @close="addQuestion" @showQuestion="showQuestion" />
+    <Modal
+      :categories="categories"
+      @close="addQuest"
+      @showQuestion="addQuestion"
+    />
   </div>
   <div class="title"><h1>Quizly</h1></div>
 
   <div class="addQues">
-    <!-- <button @click="addQuiz">Add New Quiz</button> -->
-    <button @click="addQuestion">Add Question</button>
+    <button @click="addQuest">Add Question</button>
     <button @click="addCategory">Add New Category</button>
-    <!-- <button @click="addQuiz">test</button> -->
   </div>
 
   <div class="overCont">
@@ -75,20 +77,19 @@
           <button v-else :disabled="true" @click="prevQuestion">Next</button>
         </div>
       </div>
-    </div>
 
-    <!-- THIS IS HOLDS ALL OF THE CATEGORIES  -->
-    <div class="catContainer">
-      <div v-for="(category, index) in categories" :key="index">
-        <button @click="changeCategory(index)">{{ category.name }}</button>
+      <!-- THIS IS HOLDS ALL OF THE CATEGORIES  -->
+      <div class="catContainer">
+        <button
+          v-for="(category, index) in categories"
+          :key="index"
+          @click="changeCategory(index)"
+        >
+          {{ category.name }}
+        </button>
       </div>
     </div>
   </div>
-  <br />
-  <br />
-  <br />
-  <br />
-  <br />
 </template>
 
 <script>
@@ -223,7 +224,7 @@ export default {
     };
   },
   methods: {
-    addQuestion() {
+    addQuest() {
       this.showModal = !this.showModal;
     },
     showQuestion(title, choiceA, choiceB, choiceC, choiceD, answer) {
@@ -259,20 +260,27 @@ export default {
         this.score = this.score - 100;
       }
     },
-    testHandle() {
-      this.testArray[0].test1.push({ question: "hello", reponse: "goodbye" });
-      this.testArray[0].test2.push({ question: "goodbye", reponse: "hello" });
-      console.log(this.testArray[0].test1[0]);
-      console.log(this.testArray[0].test2[0]);
-    },
     changeCategory(number) {
-      console.log("index value");
-      console.log(number);
+      // console.log("index value");
+      // console.log(number);
       this.currentCategory = [];
       this.currentCategory.push(this.categories[number]);
+      this.a = 0;
+      this.b = 1;
     },
     addCategory() {
       this.categories.push(this.newCategory);
+    },
+    addQuestion(question, choiceA, choiceB, choiceC, choiceD, answer, index) {
+      this.categories[index].questions.push({
+        question: question,
+        ansA: choiceA,
+        ansB: choiceB,
+        ansC: choiceC,
+        ansD: choiceD,
+        answer: answer,
+      });
+      // console.log(this.categories[index].questions);
     },
   },
 };
@@ -292,18 +300,20 @@ export default {
   align-items: center;
 }
 .container {
-  width: 450px;
+  width: 500px;
   font-family: "Source Sans 3";
-  padding: 20px;
+  padding: 15px;
   background: #33628a;
   border-radius: 10px;
-  margin-bottom: 20px;
 }
 .btnContainer {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   border-radius: 10px;
+  background: white;
+  padding: 10px;
+  margin-bottom: 15px;
 }
 .btnBackground button {
   background: orange;
@@ -322,7 +332,7 @@ export default {
   text-align: left;
   padding: 10px;
   background: white;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   border-radius: 10px;
 }
 .infoHead h2 {
@@ -332,17 +342,18 @@ export default {
   background: white;
   padding: 10px;
   border-radius: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 .question {
   display: flex;
   flex-direction: column;
-  height: 425px;
   justify-content: space-between;
+  min-height: 450px;
 }
 .quesTitle {
+  display: flex;
   text-align: left;
-  padding: 15px;
+  padding: 10px;
 }
 .quesTitle p {
   font-size: 20px;
@@ -355,7 +366,7 @@ export default {
 }
 .choice {
   border-radius: 15px;
-  width: 400px;
+  width: 100%;
   margin: 10px;
   background: #d9e2e9;
 }
@@ -371,21 +382,20 @@ export default {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-around;
-  width: 450px;
+  justify-content: space-between;
   font-family: "Source Sans 3";
-  padding: 20px;
-  background: #33628a;
+  background: white;
   border-radius: 10px;
+  padding: 10px;
 }
 .catContainer button {
-  width: 125px;
+  width: 130px;
   font-size: 20px;
   border-radius: 15px;
-  padding: 15px;
-  margin: 10px;
+  padding: 10px;
   border: none;
   background: #c2d0dc;
   color: #3f3f3f;
+  margin: 10px;
 }
 </style>
