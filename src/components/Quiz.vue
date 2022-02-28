@@ -94,6 +94,11 @@
             </div>
           </div>
         </div>
+
+        <!-- RETURN BUTTON -->
+        <div class="returnCon">
+          <button @click="returnCat">Return</button>
+        </div>
       </div>
 
       <div v-if="showCat">
@@ -327,6 +332,10 @@ export default {
     addCategory(category) {
       this.categories.push({ name: category, questions: [] });
     },
+    returnCat() {
+      this.showQuiz = !this.showQuiz;
+      this.showCat = !this.showCat;
+    },
   },
 };
 </script>
@@ -358,6 +367,21 @@ export default {
   margin-top: 10px;
 }
 .btnBackground button {
+  background: #ff7b7b;
+  border: none;
+  color: white;
+  padding: 10px;
+  border-radius: 25px;
+  font-size: 20px;
+  width: 115px;
+  display: flex;
+  justify-content: center;
+}
+.returnCon {
+  display: flex;
+  justify-content: center;
+}
+.returnCon button {
   background: orange;
   border: none;
   color: white;
@@ -385,6 +409,7 @@ export default {
   background: white;
   padding: 10px;
   border-radius: 10px;
+  margin-bottom: 15px;
 }
 .question {
   display: flex;
