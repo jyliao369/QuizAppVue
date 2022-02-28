@@ -12,85 +12,109 @@
   </div>
   <div class="title"><h1>Quizly</h1></div>
 
-  <div class="addQues">
-    <button @click="addCatModal">Add New Category</button>
-    <button @click="addQuestModal">Add Question</button>
-  </div>
-
   <div class="overCont">
     <div class="container">
-      <!-- THIS IS THE SCOPRE SECTION -->
-      <div class="infoHead">
-        <div>
-          <h2>{{ currentCategory[0].name }}</h2>
-        </div>
-        <div>
-          <h2>
-            Question {{ b }}/{{ this.currentCategory[0].questions.length }}
-          </h2>
-        </div>
-        <div>
-          <h2>Score: {{ score }}</h2>
-        </div>
-      </div>
-      <!-- THIS IS THE QUESTION AND ANSWER SECTION -->
-      <div class="quesContainer">
-        <div
-          class="question"
-          v-for="(questions, index) in currentCategory[0].questions.slice(a, b)"
-          :key="index"
-        >
-          <div class="quesTitle">
-            <p>{{ questions.question }}</p>
+      <!-- THIS IS THE INFO HEADER -->
+      <div v-if="showQuiz">
+        <div class="infoHead">
+          <div>
+            <h2>Current Category:</h2>
           </div>
-          <div class="choiceCont">
-            <div class="choice">
-              <p @click="checkCorrect('A')">A: {{ questions.ansA }}</p>
-            </div>
-            <div class="choice">
-              <p @click="checkCorrect('B')">B: {{ questions.ansB }}</p>
-            </div>
-            <div class="choice">
-              <p @click="checkCorrect('C')">C: {{ questions.ansC }}</p>
-            </div>
-            <div class="choice">
-              <p @click="checkCorrect('D')">D: {{ questions.ansD }}</p>
-            </div>
+          <div>
+            <h2>{{ currentCategory[0].name }}</h2>
           </div>
         </div>
-      </div>
 
-      <!-- THIS IS THE BUTTON SECTION -->
-      <div class="btnContainer">
-        <div class="btnBackground">
-          <button v-if="this.b === 1" :disabled="true" @click="prevQuestion">
-            Previous
-          </button>
-          <button v-else :disabled="false" @click="prevQuestion">
-            Previous
-          </button>
+        <!-- THIS IS THE SCORE HEADER -->
+        <div class="infoHead">
+          <div>
+            <h2>
+              Question {{ b }}/{{ this.currentCategory[0].questions.length }}
+            </h2>
+          </div>
+          <div>
+            <h2>Score: {{ score }}</h2>
+          </div>
         </div>
-        <div class="btnBackground">
-          <button
-            v-if="this.b <= this.currentCategory[0].questions.length - 1"
-            :disabled="false"
-            @click="nextQuestion"
+
+        <!-- THIS IS THE QUESTION AND ANSWER SECTION -->
+        <div class="quesContainer">
+          <div
+            class="question"
+            v-for="(questions, index) in currentCategory[0].questions.slice(
+              a,
+              b
+            )"
+            :key="index"
           >
-            Next
-          </button>
-          <button v-else :disabled="true" @click="prevQuestion">Next</button>
+            <div class="quesTitle">
+              <p>{{ questions.question }}</p>
+            </div>
+            <div class="choiceCont">
+              <div class="choice">
+                <p @click="checkCorrect('A')">A: {{ questions.ansA }}</p>
+              </div>
+              <div class="choice">
+                <p @click="checkCorrect('B')">B: {{ questions.ansB }}</p>
+              </div>
+              <div class="choice">
+                <p @click="checkCorrect('C')">C: {{ questions.ansC }}</p>
+              </div>
+              <div class="choice">
+                <p @click="checkCorrect('D')">D: {{ questions.ansD }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- THIS IS THE BUTTON SECTION -->
+          <div class="btnContainer">
+            <div class="btnBackground">
+              <button
+                v-if="this.b === 1"
+                :disabled="true"
+                @click="prevQuestion"
+              >
+                Previous
+              </button>
+              <button v-else :disabled="false" @click="prevQuestion">
+                Previous
+              </button>
+            </div>
+            <div class="btnBackground">
+              <button
+                v-if="this.b <= this.currentCategory[0].questions.length - 1"
+                :disabled="false"
+                @click="nextQuestion"
+              >
+                Next
+              </button>
+              <button v-else :disabled="true" @click="prevQuestion">
+                Next
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- THIS IS HOLDS ALL OF THE CATEGORIES  -->
-      <div class="catContainer">
-        <button
-          v-for="(category, index) in categories"
-          :key="index"
-          @click="changeCategory(index)"
-        >
-          {{ category.name }}
-        </button>
+      <div v-if="showCat">
+        <div class="overCatCon">
+          <!-- THIS HOLDS THE BUTTONS TO ADD NEW QUESTIONS AND CATEGORIES -->
+          <div class="addQuestCatCon">
+            <button @click="addCatModal">Add Category</button>
+            <button @click="addQuestModal">Add Question</button>
+          </div>
+
+          <!-- THIS IS HOLDS ALL OF THE CATEGORIES  -->
+          <div class="catContainer">
+            <button
+              v-for="(category, index) in categories"
+              :key="index"
+              @click="changeCategory(index)"
+            >
+              {{ category.name }}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -113,6 +137,8 @@ export default {
       b: 1,
       index: 0,
       score: 0,
+      showQuiz: false,
+      showCat: true,
       currentCategory: [
         {
           name: "Biology",
@@ -205,6 +231,34 @@ export default {
             },
           ],
         },
+        {
+          name: "Org. Chemistry",
+          questions: [],
+        },
+        {
+          name: "Trigonmetry",
+          questions: [],
+        },
+        {
+          name: "Social Studies",
+          questions: [],
+        },
+        {
+          name: "Game Trivia",
+          questions: [],
+        },
+        {
+          name: "Geography",
+          questions: [],
+        },
+        {
+          name: "Television",
+          questions: [],
+        },
+        {
+          name: "Harry Potter",
+          questions: [],
+        },
       ],
     };
   },
@@ -255,6 +309,9 @@ export default {
       this.currentCategory.push(this.categories[number]);
       this.a = 0;
       this.b = 1;
+      this.score = 0;
+      this.showQuiz = !this.showQuiz;
+      this.showCat = !this.showCat;
     },
     addQuestion(question, choiceA, choiceB, choiceC, choiceD, answer, index) {
       this.categories[index].questions.push({
@@ -298,20 +355,18 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  border-radius: 10px;
-  background: white;
-  padding: 10px;
-  margin-bottom: 15px;
+  margin-top: 10px;
 }
 .btnBackground button {
   background: orange;
   border: none;
   color: white;
   padding: 10px;
-  padding-left: 30px;
-  padding-right: 30px;
   border-radius: 25px;
   font-size: 20px;
+  width: 115px;
+  display: flex;
+  justify-content: center;
 }
 .infoHead {
   display: flex;
@@ -330,7 +385,6 @@ export default {
   background: white;
   padding: 10px;
   border-radius: 10px;
-  margin-bottom: 15px;
 }
 .question {
   display: flex;
@@ -366,18 +420,43 @@ export default {
   margin: 7px;
   font-size: 18px;
 }
+.overCatCon {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 15px;
+  padding: 10px;
+}
+.addQuestCatCon {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin-bottom: 10px;
+}
+.addQuestCatCon button {
+  background: orange;
+  border: none;
+  color: white;
+  padding: 10px;
+  border-radius: 25px;
+  font-size: 15px;
+  width: 185px;
+  display: flex;
+  justify-content: center;
+}
 .catContainer {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
   font-family: "Source Sans 3";
-  background: white;
-  border-radius: 10px;
-  padding: 10px;
 }
 .catContainer button {
-  width: 130px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 215px;
+  height: 50px;
   font-size: 20px;
   border-radius: 15px;
   padding: 10px;
