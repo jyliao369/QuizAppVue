@@ -31,6 +31,7 @@ export default {
     },
     addCategory() {
       this.$emit("addCategory", this.category);
+      this.$emit("close");
     },
   },
 };

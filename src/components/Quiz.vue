@@ -354,7 +354,10 @@ export default {
       });
     },
     addCategory(category) {
-      this.categories.push({ name: category, questions: [] });
+      this.categories.push({
+        name: category[0].toUpperCase() + category.slice(1),
+        questions: [],
+      });
     },
     returnCat() {
       this.showQuiz = !this.showQuiz;
