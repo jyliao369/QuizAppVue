@@ -27,7 +27,7 @@
 
         <!-- THIS IS THE SCORE HEADER -->
         <div class="infoHead">
-          <div v-if="currentCategory[0].questions.length > 1">
+          <div v-if="currentCategory[0].questions.length > 0">
             <h2>
               Question {{ b }}/{{ this.currentCategory[0].questions.length }}
             </h2>
@@ -42,7 +42,7 @@
 
         <!-- THIS IS THE QUESTION AND ANSWER SECTION -->
         <div class="quesContainer">
-          <div v-if="currentCategory[0].questions.length > 1">
+          <div v-if="currentCategory[0].questions.length > 0">
             <div
               class="question"
               v-for="(questions, index) in currentCategory[0].questions.slice(
@@ -92,30 +92,21 @@
 
           <!-- THIS IS THE BUTTON SECTION -->
           <div class="btnContainer">
-            <div class="btnBackground">
-              <button
-                v-if="this.b === 1"
-                :disabled="true"
-                @click="prevQuestion"
-              >
-                Previous
-              </button>
-              <button v-else :disabled="false" @click="prevQuestion">
-                Previous
-              </button>
-            </div>
-            <div class="btnBackground">
-              <button
-                v-if="this.b <= this.currentCategory[0].questions.length - 1"
-                :disabled="false"
-                @click="nextQuestion"
-              >
-                Next
-              </button>
-              <button v-else :disabled="true" @click="prevQuestion">
-                Next
-              </button>
-            </div>
+            <button v-if="this.b === 1" :disabled="true" @click="prevQuestion">
+              Previous
+            </button>
+            <button v-else :disabled="false" @click="prevQuestion">
+              Previous
+            </button>
+            <button @click="deleteQuestion(index)">Delete</button>
+            <button
+              v-if="this.b <= this.currentCategory[0].questions.length - 1"
+              :disabled="false"
+              @click="nextQuestion"
+            >
+              Next
+            </button>
+            <button v-else :disabled="true" @click="prevQuestion">Next</button>
           </div>
         </div>
 
@@ -177,22 +168,7 @@ export default {
       showQuiz: false,
       showCat: true,
       showDelete: false,
-      currentCategory: [
-        {
-          name: "Biology",
-          questions: [
-            {
-              question:
-                "If the transformation depicted in organelle B requires oxygen, what form of energy is represented by E IV?",
-              ansA: "Radiant energy in the form of photons",
-              ansB: "Chemical energy being stored as glycogen",
-              ansC: "Chemical energy in the form of ATP",
-              ansD: "Chemical energy released by glycolysis",
-              answer: "A",
-            },
-          ],
-        },
-      ],
+      currentCategory: [{}],
       questions: [
         {
           question:
@@ -319,11 +295,11 @@ export default {
       this.b--;
       this.index--;
     },
-    checkCorrect(answer) {
+    checkCorrect(solution) {
       console.log(this.index);
-      console.log(answer);
-      console.log(this.questions[this.index].answer);
-      if (answer === this.questions[0].answer) {
+      console.log("your answer" + solution);
+      console.log(this.currentCategory[0].questions[this.index].answer);
+      if (solution === this.currentCategory[0].questions[this.index].answer) {
         console.log("Correct");
         this.score = this.score + 100;
       } else {
@@ -333,12 +309,11 @@ export default {
     },
     changeCategory(number) {
       this.showDelete = false;
-      // console.log("index value");
-      // console.log(number);
       this.currentCategory = [];
       this.currentCategory.push(this.categories[number]);
       this.a = 0;
       this.b = 1;
+      this.index = 0;
       this.score = 0;
       this.showQuiz = !this.showQuiz;
       this.showCat = !this.showCat;
@@ -365,6 +340,16 @@ export default {
     },
     deleteCat(index) {
       this.categories.splice(index);
+    },
+    deleteQuestion(number) {
+      if (number === 0) {
+        this.categories[0].questions.splice(number, 1);
+      } else {
+        this.a--;
+        this.b--;
+        this.index--;
+        this.categories[0].questions.splice(number, 1);
+      }
     },
   },
 };
@@ -397,7 +382,11 @@ export default {
   justify-content: space-between;
   margin-top: 10px;
 }
-.btnBackground button {
+.btnBackground {
+  display: flex;
+  justify-content: space-between;
+}
+.btnContainer button {
   background: #ff7b7b;
   border: none;
   color: white;
