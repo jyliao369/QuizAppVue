@@ -27,10 +27,13 @@
 
         <!-- THIS IS THE SCORE HEADER -->
         <div class="infoHead">
-          <div>
+          <div v-if="currentCategory[0].questions.length > 1">
             <h2>
               Question {{ b }}/{{ this.currentCategory[0].questions.length }}
             </h2>
+          </div>
+          <div v-else>
+            <h2>Question 0/0</h2>
           </div>
           <div>
             <h2>Score: {{ score }}</h2>
@@ -39,29 +42,50 @@
 
         <!-- THIS IS THE QUESTION AND ANSWER SECTION -->
         <div class="quesContainer">
-          <div
-            class="question"
-            v-for="(questions, index) in currentCategory[0].questions.slice(
-              a,
-              b
-            )"
-            :key="index"
-          >
-            <div class="quesTitle">
-              <p>{{ questions.question }}</p>
+          <div v-if="currentCategory[0].questions.length > 1">
+            <div
+              class="question"
+              v-for="(questions, index) in currentCategory[0].questions.slice(
+                a,
+                b
+              )"
+              :key="index"
+            >
+              <div class="quesTitle">
+                <p>{{ questions.question }}</p>
+              </div>
+              <div class="choiceCont">
+                <div class="choice">
+                  <p @click="checkCorrect('A')">A: {{ questions.ansA }}</p>
+                </div>
+                <div class="choice">
+                  <p @click="checkCorrect('B')">B: {{ questions.ansB }}</p>
+                </div>
+                <div class="choice">
+                  <p @click="checkCorrect('C')">C: {{ questions.ansC }}</p>
+                </div>
+                <div class="choice">
+                  <p @click="checkCorrect('D')">D: {{ questions.ansD }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div v-else class="question">
+            <div class="questionTitle">
+              <h2>Thre are no Questions in this Category</h2>
             </div>
             <div class="choiceCont">
               <div class="choice">
-                <p @click="checkCorrect('A')">A: {{ questions.ansA }}</p>
+                <p>A: ???</p>
               </div>
               <div class="choice">
-                <p @click="checkCorrect('B')">B: {{ questions.ansB }}</p>
+                <p>B: ???</p>
               </div>
               <div class="choice">
-                <p @click="checkCorrect('C')">C: {{ questions.ansC }}</p>
+                <p>C: ???</p>
               </div>
               <div class="choice">
-                <p @click="checkCorrect('D')">D: {{ questions.ansD }}</p>
+                <p>D: ???</p>
               </div>
             </div>
           </div>
@@ -103,20 +127,28 @@
 
       <div v-if="showCat">
         <div class="overCatCon">
+          <!-- THIS IS HOLDS ALL OF THE CATEGORIES  -->
+          <div class="catContainer">
+            <div v-for="(category, index) in categories" :key="index">
+              <button
+                v-if="showDelete"
+                class="deleteBtn"
+                @click="deleteCat(index)"
+              >
+                x
+              </button>
+              <button class="catBtn" @click="changeCategory(index)">
+                {{ category.name }}
+              </button>
+            </div>
+          </div>
+
           <!-- THIS HOLDS THE BUTTONS TO ADD NEW QUESTIONS AND CATEGORIES -->
           <div class="addQuestCatCon">
             <button @click="addCatModal">Add Category</button>
             <button @click="addQuestModal">Add Question</button>
-          </div>
-
-          <!-- THIS IS HOLDS ALL OF THE CATEGORIES  -->
-          <div class="catContainer">
-            <button
-              v-for="(category, index) in categories"
-              :key="index"
-              @click="changeCategory(index)"
-            >
-              {{ category.name }}
+            <button @click="this.showDelete = !this.showDelete">
+              Delete Category
             </button>
           </div>
         </div>
@@ -144,6 +176,7 @@ export default {
       score: 0,
       showQuiz: false,
       showCat: true,
+      showDelete: false,
       currentCategory: [
         {
           name: "Biology",
@@ -269,21 +302,12 @@ export default {
   },
   methods: {
     addQuestModal() {
+      this.showDelete = false;
       this.showQuestionModal = !this.showQuestionModal;
     },
     addCatModal() {
+      this.showDelete = false;
       this.showCategoryModal = !this.showCategoryModal;
-    },
-    showQuestion(title, choiceA, choiceB, choiceC, choiceD, answer) {
-      console.log(title, choiceA, choiceB, choiceC, choiceD, answer);
-      this.questions.push({
-        question: title,
-        ansA: choiceA,
-        ansB: choiceB,
-        ansC: choiceC,
-        ansD: choiceD,
-        answer: answer,
-      });
     },
     nextQuestion() {
       this.a++;
@@ -308,6 +332,7 @@ export default {
       }
     },
     changeCategory(number) {
+      this.showDelete = false;
       // console.log("index value");
       // console.log(number);
       this.currentCategory = [];
@@ -327,7 +352,6 @@ export default {
         ansD: choiceD,
         answer: answer,
       });
-      // console.log(this.categories[index].questions);
     },
     addCategory(category) {
       this.categories.push({ name: category, questions: [] });
@@ -335,6 +359,9 @@ export default {
     returnCat() {
       this.showQuiz = !this.showQuiz;
       this.showCat = !this.showCat;
+    },
+    deleteCat(index) {
+      this.categories.splice(index);
     },
   },
 };
@@ -345,6 +372,7 @@ export default {
 @import url("https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Source+Sans+3&display=swap");
 .title h1 {
   color: white;
+  font-size: 50px;
 }
 .overCont {
   display: flex;
@@ -422,6 +450,11 @@ export default {
   text-align: left;
   padding: 10px;
 }
+.questionTitle h2 {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
 .quesTitle p {
   font-size: 20px;
   margin: 0px;
@@ -456,7 +489,6 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  margin-bottom: 10px;
 }
 .addQuestCatCon button {
   background: orange;
@@ -465,7 +497,7 @@ export default {
   padding: 10px;
   border-radius: 25px;
   font-size: 15px;
-  width: 185px;
+  width: 135px;
   display: flex;
   justify-content: center;
 }
@@ -475,8 +507,9 @@ export default {
   flex-wrap: wrap;
   justify-content: space-between;
   font-family: "Source Sans 3";
+  margin-bottom: 20px;
 }
-.catContainer button {
+.catBtn {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -489,5 +522,14 @@ export default {
   background: #c2d0dc;
   color: #3f3f3f;
   margin: 10px;
+}
+.deleteBtn {
+  position: absolute;
+  margin-left: -115px;
+  background: #ff5c5c;
+  color: white;
+  font-weight: 900;
+  border: none;
+  border-radius: 15px;
 }
 </style>
