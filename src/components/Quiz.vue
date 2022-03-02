@@ -10,9 +10,13 @@
   <div v-if="showCategoryModal">
     <CategoryModal @close="addCatModal" @addCategory="addCategory" />
   </div>
-  <div class="title"><h1>Quizly</h1></div>
 
   <div class="overCont">
+    <div class="title">
+      <h1 class="icon1">?</h1>
+      <h1>Quizly</h1>
+      <h1 class="icon2">?</h1>
+    </div>
     <div class="container">
       <!-- THIS IS THE INFO HEADER -->
       <div v-if="showQuiz">
@@ -343,12 +347,12 @@ export default {
     },
     deleteQuestion(number) {
       if (number === 0) {
-        this.categories[0].questions.splice(number, 1);
+        this.currentCategory[0].questions.splice(number, 1);
       } else {
         this.a--;
         this.b--;
         this.index--;
-        this.categories[0].questions.splice(number, 1);
+        this.currentCategory[0].questions.splice(number, 1);
       }
     },
   },
@@ -358,9 +362,27 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Source+Sans+3&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@500&display=swap");
+.title {
+  display: flex;
+  flex-direction: row;
+}
 .title h1 {
   color: white;
-  font-size: 50px;
+  font-size: 75px;
+  font-family: "Fredoka";
+  margin: 20px;
+}
+.icon1,
+.icon2 {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.icon1 {
+  transform: rotate(-15deg);
+}
+.icon2 {
+  transform: rotate(18deg);
 }
 .overCont {
   display: flex;
