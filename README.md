@@ -65,3 +65,5 @@ https://github.com/jyliao369
 ## Live Links
 
 Github Repo: https://github.com/jyliao369/QuizAppVue
+
+Deployed Application Link: https://jyliao369.github.io/QuizAppVue/
