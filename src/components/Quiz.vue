@@ -122,6 +122,11 @@
 
       <div v-if="showCat">
         <div class="overCatCon">
+          <div class="catHeader">
+            <h2 v-if="showDelete">Which Category to Delete?</h2>
+            <h2 v-else>Select a Category</h2>
+          </div>
+
           <!-- THIS IS HOLDS ALL OF THE CATEGORIES  -->
           <div class="catContainer">
             <div v-for="(category, index) in categories" :key="index">
@@ -380,6 +385,7 @@ export default {
 }
 .icon1 {
   transform: rotate(-15deg);
+  animation: spin 4s;
 }
 .icon2 {
   transform: rotate(18deg);
@@ -498,6 +504,9 @@ export default {
   background: white;
   border-radius: 15px;
   padding: 10px;
+}
+.catHeader h2 {
+  margin: 15px;
 }
 .addQuestCatCon {
   display: flex;
